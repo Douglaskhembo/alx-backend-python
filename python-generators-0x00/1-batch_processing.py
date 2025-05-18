@@ -2,7 +2,7 @@ import mysql.connector
 from decimal import Decimal
 
 def stream_users_in_batches(batch_size):
-    """Generator to fetch users from database in batches of batch_size."""
+    """Generator to fetch users from the database in batches of batch_size."""
     connection = None
     cursor = None
     offset = 0
@@ -20,8 +20,9 @@ def stream_users_in_batches(batch_size):
             cursor.execute(query, (batch_size, offset))
             batch = cursor.fetchall()
             if not batch:
+                # End of data, stop iteration naturally, no return with value
                 break
-            # convert Decimal age to int for each row
+            # Convert Decimal age to int for each row for consistency
             for row in batch:
                 if isinstance(row.get('age'), Decimal):
                     row['age'] = int(row['age'])
