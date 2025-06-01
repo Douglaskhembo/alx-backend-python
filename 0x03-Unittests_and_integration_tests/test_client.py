@@ -23,14 +23,23 @@ class TestGithubOrgClient(unittest.TestCase):
 
         client = GithubOrgClient(org_name)
         self.assertEqual(client.org, expected)
-        mock_get_json.assert_called_once_with(f"https://api.github.com/orgs/{org_name}")
+        mock_get_json.assert_called_once_with(
+            f"https://api.github.com/orgs/{org_name}"
+        )
 
     def test_public_repos_url(self):
         """Test _public_repos_url returns expected repos URL."""
-        with patch.object(GithubOrgClient, 'org', new_callable=PropertyMock) as mock_org:
-            mock_org.return_value = {"repos_url": "https://api.github.com/orgs/test/repos"}
+        with patch.object(
+            GithubOrgClient, 'org', new_callable=PropertyMock
+        ) as mock_org:
+            mock_org.return_value = {
+                "repos_url": "https://api.github.com/orgs/test/repos"
+            }
             client = GithubOrgClient("test")
-            self.assertEqual(client._public_repos_url, "https://api.github.com/orgs/test/repos")
+            self.assertEqual(
+                client._public_repos_url,
+                "https://api.github.com/orgs/test/repos"
+            )
 
     @patch("client.get_json")
     def test_public_repos(self, mock_get_json):
@@ -39,7 +48,9 @@ class TestGithubOrgClient(unittest.TestCase):
             {"name": "repo1"},
             {"name": "repo2"}
         ]
-        with patch.object(GithubOrgClient, '_public_repos_url', new_callable=PropertyMock) as mock_url:
+        with patch.object(
+            GithubOrgClient, '_public_repos_url', new_callable=PropertyMock
+        ) as mock_url:
             mock_url.return_value = "https://api.github.com/orgs/test/repos"
             client = GithubOrgClient("test")
             self.assertEqual(client.public_repos(), ["repo1", "repo2"])
@@ -90,4 +101,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     def test_public_repos_with_license(self):
         """Test public_repos filters repos by license."""
         client = GithubOrgClient("google")
-        self.assertEqual(client.public_repos(license="apache-2.0"), self.apache2_repos)
+        self.assertEqual(
+            client.public_repos(license="apache-2.0"),
+            self.apache2_repos
+        )
