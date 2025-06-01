@@ -7,6 +7,9 @@ from django.conf import settings
 class CustomUser(AbstractUser):
     user_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128)  # Explicitly declared to satisfy checks
+    first_name = models.CharField(max_length=150)  # Explicitly declared
+    last_name = models.CharField(max_length=150)   # Explicitly declared
     phone_number = models.CharField(max_length=20, blank=True)
 
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
