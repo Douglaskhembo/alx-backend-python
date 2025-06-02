@@ -1,19 +1,19 @@
-from django.shortcuts import render
-
-# Create your views here.
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
 from .models import Conversation, Message, User
-from .serializers import ConversationSerializer, MessageSerializer, UserSerializer
+from .serializers import ConversationSerializer, MessageSerializer
 
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['participants__username']
 
     def get_queryset(self):
         # Return conversations where user is participant
@@ -39,6 +39,8 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['message_body']
 
     def get_queryset(self):
         # Filter messages by conversations user is participant in
