@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from .models import Conversation, Message, User
 from .serializers import ConversationSerializer, MessageSerializer
 
+
 class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
@@ -16,7 +17,7 @@ class ConversationViewSet(viewsets.ModelViewSet):
     search_fields = ['participants__username']
 
     def get_queryset(self):
-        # Return conversations where user is participant
+        # Return conversations where the user is a participant
         return Conversation.objects.filter(participants=self.request.user)
 
     def perform_create(self, serializer):
@@ -36,19 +37,27 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    queryset = Message.objects.all()
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter]
     search_fields = ['message_body']
 
     def get_queryset(self):
-        # Filter messages by conversations user is participant in
-        return Message.objects.filter(conversation__participants=self.request.user)
+        # Restrict messages to the specific conversation if user is a participant
+        conversation_pk = self.kwargs['conversation_pk']
+        conversation = get_object_or_404(
+            Conversation,
+            conversation_id=conversation_pk,
+            participants=self.request.user
+        )
+        return Message.objects.filter(conversation=conversation)
 
     def perform_create(self, serializer):
-        conversation_id = self.request.data.get('conversation')
-        conversation = get_object_or_404(Conversation, conversation_id=conversation_id)
-        if self.request.user not in conversation.participants.all():
-            raise PermissionDenied("You are not a participant of this conversation.")
+        # Use conversation from the nested route and check participant access
+        conversation_pk = self.kwargs['conversation_pk']
+        conversation = get_object_or_404(
+            Conversation,
+            conversation_id=conversation_pk,
+            participants=self.request.user
+        )
         serializer.save(sender=self.request.user, conversation=conversation)
