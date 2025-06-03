@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'chats',
 ]
 
@@ -80,10 +81,9 @@ AUTH_USER_MODEL = 'chats.User'
 # Django REST Framework Settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # Require login for API access
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',  # Web browser login
-        'rest_framework.authentication.BasicAuthentication',    # API tools like Postman
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
