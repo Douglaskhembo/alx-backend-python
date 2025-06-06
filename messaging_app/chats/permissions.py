@@ -1,3 +1,5 @@
+from rest_framework import permissions  # <-- This is required
+
 from rest_framework.permissions import BasePermission
 
 class IsParticipant(BasePermission):
