@@ -6,9 +6,13 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.status import HTTP_403_FORBIDDEN
 from django.shortcuts import get_object_or_404
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from .models import Conversation, Message, User
 from .serializers import ConversationSerializer, MessageSerializer
 from .permissions import IsParticipantOfConversation
+from .pagination import CustomPagination
+from .filters import MessageFilter
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
@@ -41,8 +45,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated, IsParticipantOfConversation]
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['message_body']
+    filterset_class = MessageFilter
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         conversation_pk = self.kwargs['conversation_pk']
@@ -51,11 +57,15 @@ class MessageViewSet(viewsets.ModelViewSet):
             conversation_id=conversation_pk,
             participants=self.request.user
         )
-        return Message.objects.filter(conversation=conversation)
+        return Message.objects.filter(conversation=conversation).order_by('-timestamp')
 
     def perform_create(self, serializer):
         conversation_pk = self.kwargs['conversation_pk']
-        conversation = get_object_or_404(Conversation, conversation_id=conversation_pk)
+        conversation = get_object_or_404(
+            Conversation,
+            conversation_id=conversation_pk,
+            participants=self.request.user
+        )
 
         if self.request.user not in conversation.participants.all():
             raise PermissionDenied(
