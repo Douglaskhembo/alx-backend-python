@@ -5,3 +5,4 @@ Not Found: /favicon.ico
 2025-06-07 19:43:46.749681 - User: Anonymous - Path: /conversations
 Not Found: /conversations
 /home/khembo/ALX/Pro/Backend/alx-backend-python/Django-Middleware-0x03/messaging_app/settings.py changed, reloading.
+/home/khembo/ALX/Pro/Backend/alx-backend-python/Django-Middleware-0x03/chats/middleware.py changed, reloading.
