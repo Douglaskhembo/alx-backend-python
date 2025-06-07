@@ -4,12 +4,13 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 class User(AbstractUser):
-    user_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)  # Inherited, but explicitly declared
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     phone_number = models.CharField(max_length=20, blank=True)
+    username = models.CharField(max_length=150, unique=True)
 
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
 

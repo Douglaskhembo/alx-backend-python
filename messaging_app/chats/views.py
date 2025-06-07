@@ -33,9 +33,9 @@ class ConversationViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def add_participant(self, request, pk=None):
         conversation = self.get_object()
-        user_id = request.data.get('user_id')
+        id = request.data.get('id')
         try:
-            user = User.objects.get(user_id=user_id)
+            user = User.objects.get(id=id)
             conversation.participants.add(user)
             return Response({'status': 'participant added'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:

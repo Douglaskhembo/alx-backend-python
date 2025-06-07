@@ -83,7 +83,10 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
+    'USER_ID_FIELD': 'user_id', 
+    'USER_ID_CLAIM': 'user_id',
 }
+
 
 # Django REST Framework Settings
 REST_FRAMEWORK = {

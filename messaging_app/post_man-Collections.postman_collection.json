@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "ccd13076-7ef5-4dd4-bc00-bebdd0810560",
+		"name": "post_man-Collections",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32141803"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:8000/api/token/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"Juma\",\n    \"password\": \"pass123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/token/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/conversations/",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzAyODk2LCJpYXQiOjE3NDkzMDI1OTYsImp0aSI6ImE2OWEyZTViZDg5ODQyMzNiYTJiOTQ0N2I1NmRmNmIxIiwidXNlcl9pZCI6IjAzMTU0ZjQ5LWU5Y2ItNDU3Ni1iNWNlLWNkNzQ1OGM4MGNiYiJ9.NyR2lcw2pZZc-gI_PMDWY6cbz5WziU-ws9t2Yi-3RPc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"participants\": [\"03154f49-e9cb-4576-b5ce-cd7458c80cbb\", \"744a5647-23d7-4b7f-91ff-fda07735b0f2\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/conversations/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"conversations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/conversations/41ae524f-acc0-40bf-b62e-fe650eaf2337/messages/",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzAyODk2LCJpYXQiOjE3NDkzMDI1OTYsImp0aSI6ImE2OWEyZTViZDg5ODQyMzNiYTJiOTQ0N2I1NmRmNmIxIiwidXNlcl9pZCI6IjAzMTU0ZjQ5LWU5Y2ItNDU3Ni1iNWNlLWNkNzQ1OGM4MGNiYiJ9.NyR2lcw2pZZc-gI_PMDWY6cbz5WziU-ws9t2Yi-3RPc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"conversation\": \"41ae524f-acc0-40bf-b62e-fe650eaf2337\",\n  \"sender\": \"03154f49-e9cb-4576-b5ce-cd7458c80cbb\",\n  \"message_body\": \"Hello from Postman!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/conversations/41ae524f-acc0-40bf-b62e-fe650eaf2337/messages/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"conversations",
+						"41ae524f-acc0-40bf-b62e-fe650eaf2337",
+						"messages",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/conversations/41ae524f-acc0-40bf-b62e-fe650eaf2337/messages/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/conversations/41ae524f-acc0-40bf-b62e-fe650eaf2337/messages/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"conversations",
+						"41ae524f-acc0-40bf-b62e-fe650eaf2337",
+						"messages",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
