@@ -28,4 +28,16 @@ def log_message_edit(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=User)
 def cleanup_user_data(sender, instance, **kwargs):
+    # Delete all messages where user is sender or receiver
+    Message.objects.filter(sender=instance).delete()
+    Message.objects.filter(receiver=instance).delete()
+    
+    # Delete all notifications for this user
+    Notification.objects.filter(user=instance).delete()
+    
+    # Delete message histories for messages sent/received by this user
+    MessageHistory.objects.filter(message__sender=instance).delete()
+    MessageHistory.objects.filter(message__receiver=instance).delete()
+
     print(f"Cleaned up data for user {instance.username}")
+
