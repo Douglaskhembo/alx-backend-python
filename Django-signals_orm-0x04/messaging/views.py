@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 from django.shortcuts import render
 from .models import Message
 from django.shortcuts import redirect
@@ -53,3 +54,15 @@ def unread_messages(request):
     )
     return render(request, 'messaging/unread_messages.html', {'unread_messages': unread_msgs})
 
+
+@cache_page(60)  # Cache this view for 60 seconds
+@login_required
+def threaded_conversations(request):
+    # Get top-level messages where the user is the receiver OR sender
+    messages = Message.objects.filter(
+        Q(receiver=request.user) | Q(sender=request.user),
+        parent_message__isnull=True
+    ).select_related('sender', 'receiver') \
+     .prefetch_related('replies__sender', 'replies__receiver')
+
+    return render(request, 'messaging/threaded_conversations.html', {'messages': messages})
