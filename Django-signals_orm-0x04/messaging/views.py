@@ -3,6 +3,7 @@ from django.shortcuts import render
 from .models import Message
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 def get_all_replies(message):
     replies = list(message.replies.all().select_related('sender', 'receiver'))
@@ -24,12 +25,15 @@ def delete_user(request):
 
 @login_required
 def threaded_conversations(request):
-    # Get top-level messages for the logged-in user
-    messages = Message.objects.filter(receiver=request.user, parent_message__isnull=True) \
-        .select_related('sender', 'receiver') \
-        .prefetch_related('replies__sender', 'replies__receiver')
+    # Get top-level messages where the user is the receiver OR sender
+    messages = Message.objects.filter(
+        Q(receiver=request.user) | Q(sender=request.user),
+        parent_message__isnull=True
+    ).select_related('sender', 'receiver') \
+     .prefetch_related('replies__sender', 'replies__receiver')
 
     return render(request, 'messaging/threaded_conversations.html', {'messages': messages})
+
 
 
 @login_required
