@@ -45,8 +45,11 @@ def view_message_thread(request, message_id):
         'replies': replies,
     })
 
+
 @login_required
 def unread_messages(request):
-    unread_msgs = Message.unread.for_user(request.user).select_related('sender').order_by('-timestamp')
+    unread_msgs = Message.unread.unread_for_user(request.user).select_related('sender').only(
+        'id', 'sender__username', 'content', 'timestamp'
+    )
     return render(request, 'messaging/unread_messages.html', {'unread_messages': unread_msgs})
 

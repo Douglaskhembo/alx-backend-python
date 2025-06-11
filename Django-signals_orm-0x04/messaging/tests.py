@@ -11,3 +11,8 @@ class MessagingSignalTest(TestCase):
         msg = Message.objects.create(sender=self.sender, receiver=self.receiver, content="Hello!")
         notification = Notification.objects.filter(user=self.receiver, message=msg).first()
         self.assertIsNotNone(notification)
+
+def test_unread_manager(self):
+    msg = Message.objects.create(sender=self.sender, receiver=self.receiver, content="Unread Test")
+    unread = Message.unread.unread_for_user(self.receiver)
+    self.assertIn(msg, unread)
