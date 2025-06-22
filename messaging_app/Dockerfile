@@ -11,9 +11,9 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Step 4: Install dependencies
-COPY requirements.txt /app/
+COPY Requirements.txt /app/
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r Requirements.txt
 
 # Step 5: Copy project files
 COPY . /app/
