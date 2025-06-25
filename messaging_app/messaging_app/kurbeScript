@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -e
+
+echo " Starting Kubernetes local cluster setup..."
+
+# Step 1: Install kubectl from binary if not present
+if ! command -v kubectl &> /dev/null; then
+  echo " Installing kubectl from binary..."
+  curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+  chmod +x kubectl
+  sudo mv kubectl /usr/local/bin/
+else
+  echo " kubectl already installed"
+fi
+
+# Step 2: Install Minikube if not present
+if ! command -v minikube &> /dev/null; then
+  echo " Installing Minikube..."
+  curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+  sudo install minikube-linux-amd64 /usr/local/bin/minikube
+  rm minikube-linux-amd64
+else
+  echo " Minikube already installed"
+fi
+
+# Step 3: Start Minikube with Docker driver
+echo " Starting Minikube using Docker driver..."
+minikube start --driver=docker --docker-env DOCKER_HOST=unix:///var/run/docker.sock
+if [ $? -ne 0 ]; then
+  echo " Failed to start Minikube. Please check your Docker setup."
+  exit 1
+fi
+
+# Step 4: Display cluster info
+echo " Verifying Kubernetes cluster status..."
+kubectl cluster-info
+
+# Step 5: List pods in all namespaces
+echo " Retrieving pods..."
+kubectl get pods -A
+
+echo " Kubernetes setup complete!"
