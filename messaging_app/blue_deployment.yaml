@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: messaging-app
-          image: khembo/messaging-app:latest
+          image: khembo/messaging-app:2.0
           ports:
             - containerPort: 8000
           command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
