@@ -7,6 +7,9 @@ kubectl apply -f green_deployment.yaml
 # Apply or update the service
 kubectl apply -f kubeservice.yaml
 
-# Check logs of green deployment to verify
+# Get the name of the pod running the green deployment
 GREEN_POD=$(kubectl get pods -l app=messaging-app-green -o jsonpath="{.items[0].metadata.name}")
+
+# Display logs of the green pod
+echo "Logs from green deployment pod: $GREEN_POD"
 kubectl logs "$GREEN_POD"
