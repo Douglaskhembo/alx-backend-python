@@ -1,0 +1,11 @@
+# Enable Ingress (for Minikube users)
+minikube addons enable ingress
+
+# Apply Ingress configuration
+kubectl apply -f ingress.yaml
+
+# Check if the Ingress resource is created successfully
+kubectl get ingress
+
+# Get services in ingress namespace (debugging)
+kubectl get svc -n ingress-nginx
