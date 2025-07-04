@@ -1,0 +1,64 @@
+name: Django CI
+
+on:
+  push:
+    paths:
+      - 'messaging_app/**'
+  pull_request:
+    paths:
+      - 'messaging_app/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DJANGO_SECRET_KEY: testkey
+      MYSQL_DB: test_db
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: test_pass
+      DB_HOST: db
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      working-directory: messaging_app
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r Requirements.txt
+
+    - name: Wait for MySQL to be ready
+      run: sleep 30
+
+    - name: Run migrations
+      working-directory: messaging_app
+      run: |
+        python manage.py migrate
+
+    - name: Run tests
+      working-directory: messaging_app
+      run: |
+        python manage.py test
